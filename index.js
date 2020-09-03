@@ -87,7 +87,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 	// user joins
 	if (newStateChannel != undefined && dynamicChannels[newStateChannel.id]) {
 		newStateChannel.guild.channels
-			.create('Novo canal', {
+			.create(`${newState.member.displayName}'s channel`, {
 				type: 'voice',
 				parent: dynamicChannels[newStateChannel.id],
 			})
