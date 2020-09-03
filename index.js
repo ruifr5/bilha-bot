@@ -14,8 +14,18 @@ for (const file of commandFiles) {
 }
 
 client.once('ready', () => {
-	const fileBuffer = fs.readFileSync('./db/dynamicChannels.json');
-	if (fileBuffer.length) {
+	let fileBuffer;
+	try {
+		fileBuffer = fs.readFileSync('./db/dynamicChannels.json');
+	} catch (err) {
+		if (err.code === 'ENOENT') {
+			console.log('OnReady: Cache file not found!');
+		} else {
+			throw err;
+		}
+	}
+
+	if (fileBuffer && fileBuffer.length) {
 		Object.assign(dynamicChannels, JSON.parse(fileBuffer));
 	}
 
