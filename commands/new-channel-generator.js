@@ -19,7 +19,7 @@ module.exports = {
 			})
 			.then(({ id: createdCategoryId }) =>
 				guildChannelManager
-					.create('Click to create new channel', {
+					.create('Create new channel', {
 						type: 'voice',
 						parent: createdCategoryId,
 					})

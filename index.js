@@ -118,18 +118,31 @@ client.on('channelDelete', (channel) => {
 		const parentChannel = channel.client.channels.cache.get(parentId);
 		if (parentChannel) {
 			parentChannel.delete('bot: child deleted');
+			delete dynamicChannels[channel.id];
+			saveToCache();
 		}
 	}
 
 	const findResult = Object.entries(dynamicChannels).find(([key, value]) => value === channel.id);
 	const childId = findResult && findResult.length && findResult[0];
+
 	if (childId) {
 		const childChannel = channel.client.channels.cache.get(childId);
 		if (childChannel) {
 			childChannel.delete('bot: parent deleted');
+			delete dynamicChannels[childId];
+			saveToCache();
 		}
 	}
 });
+
+function saveToCache() {
+	fs.writeFile('./db/dynamicChannels.json', JSON.stringify(dynamicChannels), (err) => {
+		if (err) {
+			console.log(err);
+		}
+	});
+}
 
 client.login(process.env.BOT_TOKEN); // BOT_TOKEN is the Client Secret
 // client.login(token);
