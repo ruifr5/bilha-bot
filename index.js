@@ -19,6 +19,8 @@ client.once('ready', () => {
 		Object.assign(dynamicChannels, JSON.parse(fileBuffer));
 	}
 
+	client.user.setActivity('bb!help', { type: 'LISTENING' });
+
 	console.log('Ready!');
 });
 
