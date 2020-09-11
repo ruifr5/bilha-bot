@@ -20,9 +20,6 @@ client.once('ready', () => {
 
 	client.user.setActivity('bb!help', { type: 'LISTENING' });
 
-	firebase.addChannelPair('aa', process.env.FIREBASE_SERVICE_ACCOUNT);
-	firebase.addChannelPair('bb', JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT));
-
 	console.log('Ready!');
 });
 
