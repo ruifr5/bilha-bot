@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 
 admin.initializeApp({
-	credential: admin.credential.cert(process.env.FIREBASE_SERVICE_ACCOUNT),
+	credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)),
 	databaseURL: 'https://billha-bot.firebaseio.com',
 	authDomain: 'billha-bot.firebaseapp.com',
 });
