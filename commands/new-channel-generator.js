@@ -1,5 +1,5 @@
-const fs = require('fs');
 const dynamicChannels = {};
+const firebase = require('../db/firebaseService');
 
 module.exports = {
 	name: 'new-channel-generator',
@@ -28,11 +28,7 @@ module.exports = {
 						if (Object.keys(dynamicChannels).length > 500) {
 							message.client.commands.get('clear-channel-cache').execute(message);
 						} else {
-							fs.writeFile('./db/dynamicChannels.json', JSON.stringify(dynamicChannels), (err) => {
-								if (err) {
-									console.log(err);
-								}
-							});
+							firebase.addChannelPair(createdChannel.id, createdCategoryId);
 						}
 					})
 					.catch((error) => {

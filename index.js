@@ -2,6 +2,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const { token, prefix } = require('./config.json');
 const dynamicChannels = require('./commands/new-channel-generator').dynamicChannels;
+const firebase = require('./db/firebaseService');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -14,20 +15,8 @@ for (const file of commandFiles) {
 }
 
 client.once('ready', () => {
-	let fileBuffer;
-	try {
-		fileBuffer = fs.readFileSync('./db/dynamicChannels.json');
-	} catch (err) {
-		if (err.code === 'ENOENT') {
-			console.log('OnReady: Cache file not found!');
-		} else {
-			throw err;
-		}
-	}
-
-	if (fileBuffer && fileBuffer.length) {
-		Object.assign(dynamicChannels, JSON.parse(fileBuffer));
-	}
+	// fetch channels from database
+	firebase.getAllChannels((data) => Object.assign(dynamicChannels, data));
 
 	client.user.setActivity('bb!help', { type: 'LISTENING' });
 
@@ -130,8 +119,7 @@ client.on('channelDelete', (channel) => {
 		const parentChannel = channel.client.channels.cache.get(parentId);
 		if (parentChannel) {
 			parentChannel.delete('bot: child deleted');
-			delete dynamicChannels[channel.id];
-			saveToCache();
+			firebase.removeChannelPair(channel.id);
 		}
 	}
 
@@ -142,19 +130,10 @@ client.on('channelDelete', (channel) => {
 		const childChannel = channel.client.channels.cache.get(childId);
 		if (childChannel) {
 			childChannel.delete('bot: parent deleted');
-			delete dynamicChannels[childId];
-			saveToCache();
+			firebase.removeChannelPair(childId);
 		}
 	}
 });
 
-function saveToCache() {
-	fs.writeFile('./db/dynamicChannels.json', JSON.stringify(dynamicChannels), (err) => {
-		if (err) {
-			console.log(err);
-		}
-	});
-}
-
 client.login(process.env.BOT_TOKEN); // BOT_TOKEN is the Client Secret
-//  client.login(token);
+// client.login(token);

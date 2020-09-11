@@ -1,5 +1,5 @@
 const { dynamicChannels } = require('./new-channel-generator');
-const fs = require('fs');
+const firebase = require('../db/firebaseService');
 
 module.exports = {
 	name: 'clear-channel-cache',
@@ -15,19 +15,14 @@ module.exports = {
 			.reduce((prev, curr) => Object.assign(prev, curr), {});
 
 		// update runtime cache
-		deleteProperties(dynamicChannels);
+		deleteAllProperties(dynamicChannels);
 		Object.assign(dynamicChannels, updatedList);
 
 		// update offline cache
-		fs.writeFile('./db/dynamicChannels.json', JSON.stringify(updatedList), (err) => {
-			if (err) {
-				message.channel.send('Failed to clear cache.');
-				console.log(err);
-			}
-		});
+		firebase.overwriteAllChannels(updatedList);
 	},
 };
 
-function deleteProperties(o) {
+function deleteAllProperties(o) {
 	Object.keys(o).forEach((key) => delete o[key]);
 }

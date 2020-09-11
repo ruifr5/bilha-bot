@@ -35,6 +35,7 @@ module.exports = {
 		const commandName = args[0].toLowerCase();
 		if (commandName === 'all') {
 			message.client.commands.forEach((value, key) => reloadCommand(message, key));
+			message.channel.send('--- reloading complete ---');
 		} else {
 			reloadCommand(message, commandName);
 		}
