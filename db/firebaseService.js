@@ -1,5 +1,7 @@
 const admin = require('firebase-admin');
 
+// todo: implementar failsafe para caso de falha de fetch on init da app
+
 admin.initializeApp({
 	credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)),
 	databaseURL: 'https://billha-bot.firebaseio.com',

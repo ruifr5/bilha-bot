@@ -5,6 +5,7 @@ module.exports = {
 	name: 'clear-channel-cache',
 	description: 'Remove old channel info from cache.',
 	aliases: ['ccc'],
+	skipHelp: true,
 	execute(message) {
 		// filter old info
 		const updatedList = Object.entries(dynamicChannels)

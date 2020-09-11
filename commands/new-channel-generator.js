@@ -25,11 +25,11 @@ module.exports = {
 					})
 					.then((createdChannel) => {
 						dynamicChannels[createdChannel.id] = createdCategoryId;
-						if (Object.keys(dynamicChannels).length > 500) {
-							message.client.commands.get('clear-channel-cache').execute(message);
-						} else {
-							firebase.addChannelPair(createdChannel.id, createdCategoryId);
-						}
+						// if (Object.keys(dynamicChannels).length > 500) {
+						// 	message.client.commands.get('clear-channel-cache').execute(message);
+						// } else {
+						firebase.addChannelPair(createdChannel.id, createdCategoryId);
+						// }
 					})
 					.catch((error) => {
 						console.log('erro a criar canal: ', error);
