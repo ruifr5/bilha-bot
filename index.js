@@ -18,7 +18,7 @@ client.once('ready', () => {
 	// fetch channels from database
 	firebase.getAllChannels((data) => Object.assign(dynamicChannels, data));
 
-	client.user.setActivity(`${prefix}!help`, { type: 'LISTENING' });
+	client.user.setActivity(`${prefix}help`, { type: 'LISTENING' });
 
 	console.log('Ready!');
 });
