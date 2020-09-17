@@ -18,7 +18,7 @@ client.once('ready', () => {
 	// fetch channels from database
 	firebase.getAllChannels((data) => Object.assign(dynamicChannels, data));
 
-	client.user.setActivity('bb!help', { type: 'LISTENING' });
+	client.user.setActivity(`${prefix}!help`, { type: 'LISTENING' });
 
 	console.log('Ready!');
 });
@@ -87,8 +87,13 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 
 	// user joins
 	if (newStateChannel != undefined && dynamicChannels[newStateChannel.id]) {
+		const roomName =
+			oldState.member.id === process.env.RUI_DISCORD_ID
+				? 'Rebenta bilhas room'
+				: `Room ${getNewChildChannelNumber(newStateChannel.parent)}`;
+
 		newStateChannel.guild.channels
-			.create(`${newState.member.displayName}'s channel`, {
+			.create(roomName, {
 				type: 'voice',
 				parent: dynamicChannels[newStateChannel.id],
 			})
@@ -109,7 +114,13 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 	) {
 		oldStateChannel
 			.delete('bot deleted: empty channel from generator')
-			.catch((error) => console.log('unable to delete empty channel: ', error));
+			.catch((error) =>
+				console.log(
+					'Unable to automatically delete channel: ',
+					error.message,
+					'(channel might have been deleted manually)',
+				),
+			);
 	}
 });
 
@@ -137,3 +148,30 @@ client.on('channelDelete', (channel) => {
 
 client.login(process.env.BOT_TOKEN); // BOT_TOKEN is the Client Secret
 // client.login(token);
+
+// utils ------
+
+function getNewChildChannelNumber(parentChannel) {
+	// get array with existing channel numbers
+	const channelNumbers = parentChannel.children
+		.reduce((acumulator, channel) => {
+			const roomNumber = Number(channel.name.split(' ')[1]);
+			if (!isNaN(roomNumber)) {
+				acumulator.push(roomNumber);
+			}
+			return acumulator;
+		}, [])
+		.sort();
+
+	// find lowest unused channel number
+	let lowestUnusedChannelNumber = 1;
+	for (let i = 0; i < channelNumbers.length; i++) {
+		if (lowestUnusedChannelNumber === channelNumbers[i]) {
+			++lowestUnusedChannelNumber;
+		} else {
+			break;
+		}
+	}
+
+	return lowestUnusedChannelNumber;
+}

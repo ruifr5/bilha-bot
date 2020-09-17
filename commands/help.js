@@ -11,7 +11,7 @@ module.exports = {
 		const { commands } = message.client;
 
 		if (!args.length) {
-			data.push('Here\'s a list of all my commands (remember to use prefix "bb!"):\n');
+			data.push(`Here's a list of all my commands (remember to use prefix "${prefix}"):\n`);
 			data.push(
 				commands
 					.filter((command) => !command.skipHelp)
