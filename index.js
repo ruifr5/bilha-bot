@@ -9,9 +9,13 @@ client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith('.js'));
 const cooldowns = new Discord.Collection();
 
+const easterEggs = { 'quem é o maior fagote?': 'fagote' };
+
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
+	if (command.name) {
+		client.commands.set(command.name, command);
+	}
 }
 
 client.once('ready', () => {
@@ -24,10 +28,21 @@ client.once('ready', () => {
 });
 
 client.on('message', (message) => {
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
+	if (message.author.bot) return;
 
-	const args = message.content.slice(prefix.length).trim().split(/ +/);
-	const commandName = args.shift().toLowerCase();
+	let args;
+	let commandName;
+
+	if (message.content.startsWith(prefix)) {
+		args = message.content.slice(prefix.length).trim().split(/ +/);
+		commandName = args.shift().toLowerCase();
+	}
+	// verifica se é easter egg
+	else if ((commandName = easterEggs.find((element) => element === message.content.toLowerCase()))) {
+		args = [];
+	} else {
+		return;
+	}
 
 	const command =
 		client.commands.get(commandName) ||
