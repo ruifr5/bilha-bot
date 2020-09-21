@@ -102,10 +102,11 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 
 	// user joins
 	if (newStateChannel != undefined && dynamicChannels[newStateChannel.id]) {
-		const roomName =
+		const roomNumber =
 			oldState.member.id === process.env.RUI_DISCORD_ID
-				? 'Rebenta bilhas room'
-				: `Room ${getNewChildChannelNumber(newStateChannel.parent)}`;
+				? 69
+				: getNewChildChannelNumber(newStateChannel.parent);
+		const roomName = `Room ${roomNumber}`;
 
 		newStateChannel.guild.channels
 			.create(roomName, {
@@ -171,7 +172,7 @@ function getNewChildChannelNumber(parentChannel) {
 	const channelNumbers = parentChannel.children
 		.reduce((acumulator, channel) => {
 			const roomNumber = Number(channel.name.split(' ')[1]);
-			if (!isNaN(roomNumber)) {
+			if (!isNaN(roomNumber) && !acumulator.includes(roomNumber)) {
 				acumulator.push(roomNumber);
 			}
 			return acumulator;
