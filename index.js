@@ -38,7 +38,7 @@ client.on('message', (message) => {
 		commandName = args.shift().toLowerCase();
 	}
 	// verifica se é easter egg
-	else if ((commandName = easterEggs.find((element) => element === message.content.toLowerCase()))) {
+	else if ((commandName = easterEggs[message.content.toLowerCase()])) {
 		args = [];
 	} else {
 		return;

@@ -6,6 +6,6 @@ module.exports = {
 	execute(message) {
 		const random = Math.floor(Math.random() * Math.floor(3));
 
-		message.reply(`O maior fagote é o ${fagotes[random]}, sempre foi.`, { disableMentions: 'all' });
+		message.channel.send(`O maior fagote é o ${fagotes[random]}, sempre foi.`);
 	},
 };
