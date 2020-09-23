@@ -6,6 +6,7 @@ module.exports = {
 	description: 'Creates a dynamic channel generator.',
 	aliases: ['ncg'],
 	dynamicChannels,
+	guildOnly: true,
 	execute(message, args) {
 		if (!message.member.hasPermission(['MANAGE_CHANNELS'], { checkAdmin: true, checkOwner: true })) {
 			return message.channel.send('You do not have permission to execute that command.');
