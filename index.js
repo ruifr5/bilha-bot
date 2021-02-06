@@ -9,8 +9,6 @@ client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith('.js'));
 const cooldowns = new Discord.Collection();
 
-const easterEggs = { 'quem é o maior viado?': 'viado' };
-
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	if (command.name) {
@@ -36,10 +34,6 @@ client.on('message', (message) => {
 	if (message.content.startsWith(prefix)) {
 		args = message.content.slice(prefix.length).trim().split(/ +/);
 		commandName = args.shift().toLowerCase();
-	}
-	// verifica se é easter egg
-	else if ((commandName = easterEggs[message.content.toLowerCase()])) {
-		args = [];
 	} else {
 		return;
 	}
@@ -102,10 +96,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 
 	// user joins
 	if (newStateChannel != undefined && dynamicChannels[newStateChannel.id]) {
-		const roomNumber =
-			oldState.member.id === process.env.RUI_DISCORD_ID
-				? 69
-				: getNewChildChannelNumber(newStateChannel.parent);
+		const roomNumber = getNewChildChannelNumber(newStateChannel.parent);
 		const roomName = `Room ${roomNumber}`;
 
 		newStateChannel.guild.channels
