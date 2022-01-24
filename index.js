@@ -97,7 +97,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 	// user joins
 	if (newStateChannel != undefined && dynamicChannels[newStateChannel.id]) {
 		const roomNumber = getNewChildChannelNumber(newStateChannel.parent);
-		const roomName = `Room ${roomNumber}`;
+		const roomName = `Lost Ark waiting room ${roomNumber}`;
 
 		newStateChannel.guild.channels
 			.create(roomName, {
