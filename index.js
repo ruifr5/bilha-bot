@@ -162,7 +162,7 @@ function getNewChildChannelNumber(parentChannel) {
 	// get array with existing channel numbers
 	const channelNumbers = parentChannel.children
 		.reduce((acumulator, channel) => {
-			const roomNumber = Number(channel.name.split(' ')[1]);
+			const roomNumber = Number(channel.name.split(' ')[channel.name.length - 1]);
 			if (!isNaN(roomNumber) && !acumulator.includes(roomNumber)) {
 				acumulator.push(roomNumber);
 			}
