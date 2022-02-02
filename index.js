@@ -39,7 +39,7 @@ client.on('message', (message) => {
 			'já saiu?',
 			'ja saiu?',
 		];
-		if (questions.includes(message.content.toLowerCase())) {
+		if (questions.find(question => message.content.toLowerCase().includes(question))) {
 			const lostArkReleaseDate = Date.parse('11 Feb 2022  17:00:00 GMT');
 			const seconds = (lostArkReleaseDate - new Date()) / 1000;
 			const days = Math.floor(seconds / 60 / 60 / 24);
