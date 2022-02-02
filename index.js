@@ -34,6 +34,19 @@ client.on('message', (message) => {
 	if (message.content.startsWith(prefix)) {
 		args = message.content.slice(prefix.length).trim().split(/ +/);
 		commandName = args.shift().toLowerCase();
+	} else if (message.author.username.includes('Averse')) { // todo: apagar "else if" depois de Lost Ark sair
+		const questions = [
+			'já saiu?',
+			'ja saiu?',
+		];
+		if (questions.includes(message.content.toLowerCase())) {
+			const lostArkReleaseDate = Date.parse('11 Feb 2022  17:00:00 GMT');
+			const seconds = (lostArkReleaseDate - new Date()) / 1000;
+			const days = Math.floor(seconds / 60 / 60 / 24);
+			const hours = Math.ceil((seconds - (days * 24 * 60 * 60)) / 60 / 60);
+			message.reply(`Ainda faltam ${days} dia${days == 1 ? '' : 's'} e ${hours} hora${hours == 1 ? '' : 's'} para sair o Lost Ark.`);
+		}
+		return;
 	} else {
 		return;
 	}
