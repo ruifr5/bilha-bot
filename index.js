@@ -42,6 +42,10 @@ client.on('message', (message) => {
 		if (questions.find(question => message.content.toLowerCase().includes(question))) {
 			const lostArkReleaseDate = Date.parse('11 Feb 2022  17:00:00 GMT');
 			const seconds = (lostArkReleaseDate - new Date()) / 1000;
+			if (seconds <= 0) {
+				message.reply(`Sim já saiu.`);
+				return;
+			}
 			const days = Math.floor(seconds / 60 / 60 / 24);
 			const hours = Math.ceil((seconds - (days * 24 * 60 * 60)) / 60 / 60);
 			message.reply(`Ainda faltam ${days} dia${days == 1 ? '' : 's'} e ${hours} hora${hours == 1 ? '' : 's'} para sair o Lost Ark.`);
