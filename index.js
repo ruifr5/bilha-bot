@@ -34,26 +34,44 @@ client.on('message', (message) => {
 	if (message.content.startsWith(prefix)) {
 		args = message.content.slice(prefix.length).trim().split(/ +/);
 		commandName = args.shift().toLowerCase();
-	} else if (message.author.username.includes('Averse')) { // todo: apagar "else if" depois de Lost Ark sair
+	} else { // todo: apagar "else" depois de Lost Ark sair
 		const questions = [
 			'já saiu?',
 			'ja saiu?',
 		];
 		if (questions.find(question => message.content.toLowerCase().includes(question))) {
-			const lostArkReleaseDate = Date.parse('8 Feb 2022  17:00:00 GMT');
+			const lostArkReleaseDate = Date.parse('8 Feb 2022 17:00:00 GMT');
 			const seconds = (lostArkReleaseDate - new Date()) / 1000;
 			if (seconds <= 0) {
-				message.reply(`Sim já saiu.`);
+				message.reply(`Sim já saiu!`);
 				return;
 			}
-			const days = Math.floor(seconds / 60 / 60 / 24);
-			const hours = Math.ceil((seconds - (days * 24 * 60 * 60)) / 60 / 60);
-			message.reply(`Ainda faltam ${days} dia${days == 1 ? '' : 's'} e ${hours} hora${hours == 1 ? '' : 's'} para sair o Lost Ark.`);
+			const pluralizer = (number, pluralSymbol) => number == 1 ? '' : pluralSymbol;
+			let days = Math.floor(seconds / 60 / 60 / 24);
+			let hours = Math.floor((seconds - (days * 24 * 60 * 60)) / 60 / 60);
+			let mins = Math.ceil((seconds - (days * 24 * 60 * 60) - (hours * 60 * 60)) / 60);
+			if (mins == 60) {
+				++hours;
+				mins = 0;
+			}
+			if (hours == 24) {
+				++days;
+				hours = 0;
+			}
+			const strDays = days == 0 ? '' : `${days} dia${pluralizer(days, 's')}`;
+			const strHours = hours == 0 ? '' : `${hours} hora${pluralizer(hours, 's')}`;
+			const strMins = mins == 0 ? '' : `${mins} minuto${pluralizer(mins, 's')}`;
+			const hSeparator = days && hours ? ', ' : '';
+			const mSeparator = (days || hours) && mins ? ' e ' : '';
+			const reply = `Ainda falta${pluralizer(days || hours || mins, 'm')} ${strDays}${hSeparator}${strHours}${mSeparator}${strMins} para sair o Lost Ark.`;
+
+			message.reply(reply);
 		}
 		return;
-	} else {
-		return;
 	}
+	// else {
+	// 	return;
+	// }
 
 	const command =
 		client.commands.get(commandName) ||
