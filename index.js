@@ -35,6 +35,17 @@ client.on('message', (message) => {
 		args = message.content.slice(prefix.length).trim().split(/ +/);
 		commandName = args.shift().toLowerCase();
 	} else {
+		const questions = [
+			'já abriu?',
+			'ja abriu?',
+		];
+		if (questions.includes(message.content.toLowerCase())) {
+			firebase.getJaAbriuMessages((data) => {
+				if (!data || data.length < 1) { return; }
+				const randomIndex = Math.floor((Math.random() * data.length));
+				message.reply(data[randomIndex]);
+			});
+		}
 		return;
 	}
 
