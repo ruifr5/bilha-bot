@@ -34,4 +34,9 @@ function removeChannelPair(child, callback) {
 	oneChannel.remove().then(() => callback && callback());
 }
 
-module.exports = { getChannelPair, getAllChannels, overwriteAllChannels, addChannelPair, removeChannelPair };
+function getJaAbriuMessages(callback) {
+	const oneChannel = db.ref('jaabriu');
+	oneChannel.once('value', (snapshot) => callback && callback(snapshot.val()));
+}
+
+module.exports = { getChannelPair, getAllChannels, overwriteAllChannels, addChannelPair, removeChannelPair, getJaAbriuMessages };
